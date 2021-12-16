@@ -7,7 +7,6 @@ import {
   Dropdown,
   Container,
   Icon,
-  Image,
   Label
 } from 'semantic-ui-react';
 
@@ -43,7 +42,7 @@ function Main (props) {
 
   return (
     <Menu
-      attached='top'
+      attached="top"
       tabular
       style={{
         backgroundColor: '#fff',
@@ -53,28 +52,23 @@ function Main (props) {
       }}
     >
       <Container>
-        <Menu.Menu>
-          <Image src={`${process.env.PUBLIC_URL}/assets/substrate-logo.png`} size='mini' />
-        </Menu.Menu>
-        <Menu.Menu position='right' style={{ alignItems: 'center' }}>
-          { !accountSelected
+        <Menu.Menu position="right" style={{ alignItems: 'center' }}>
+          {!accountSelected
             ? <span>
               Add your account with the{' '}
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href='https://github.com/polkadot-js/extension'
-              >
+              <a target="_blank"
+                 rel="noopener noreferrer"
+                 href="https://github.com/polkadot-js/extension">
                 Polkadot JS Extension
               </a>
             </span>
-            : null }
+            : null}
           <CopyToClipboard text={accountSelected}>
             <Button
               basic
               circular
-              size='large'
-              icon='user'
+              size="large"
+              icon="user"
               color={accountSelected ? 'green' : 'red'}
             />
           </CopyToClipboard>
@@ -82,14 +76,14 @@ function Main (props) {
             search
             selection
             clearable
-            placeholder='Select an account'
+            placeholder="Select an account"
             options={keyringOptions}
             onChange={(_, dropdown) => {
               onChange(dropdown.value);
             }}
             value={accountSelected}
           />
-          <BalanceAnnotation accountSelected={accountSelected} />
+          <BalanceAnnotation accountSelected={accountSelected}/>
         </Menu.Menu>
       </Container>
     </Menu>
@@ -107,26 +101,29 @@ function BalanceAnnotation (props) {
 
     // If the user has selected an address, create a new subscription
     accountSelected &&
-      api.query.system.account(accountSelected, balance => {
-        setAccountBalance(balance.data.free.toHuman());
+    api.query.system.account(accountSelected, balance => {
+      setAccountBalance(balance.data.free.toHuman());
+    })
+      .then(unsub => {
+        unsubscribe = unsub;
       })
-        .then(unsub => {
-          unsubscribe = unsub;
-        })
-        .catch(console.error);
+      .catch(console.error);
 
     return () => unsubscribe && unsubscribe();
   }, [api, accountSelected]);
 
   return accountSelected
-    ? <Label pointing='left'>
-        <Icon name='money' color='green' />
-        {accountBalance}
-      </Label>
+    ? <Label pointing="left">
+      <Icon name="money" color="green"/>
+      {accountBalance}
+    </Label>
     : null;
 }
 
 export default function AccountSelector (props) {
-  const { api, keyring } = useSubstrate();
+  const {
+    api,
+    keyring
+  } = useSubstrate();
   return keyring.getPairs && api.query ? <Main {...props} /> : null;
 }

@@ -9,16 +9,18 @@ import AccountSelector from './AccountSelector';
 import Balances from './Balances';
 import BlockNumber from './BlockNumber';
 import Events from './Events';
-import Interactor from './Interactor';
-import Metadata from './Metadata';
 import NodeInfo from './NodeInfo';
 import TemplateModule from './TemplateModule';
 import Transfer from './Transfer';
-import Upgrade from './Upgrade';
 
 function Main () {
   const [accountAddress, setAccountAddress] = useState(null);
-  const { apiState, keyring, keyringState, apiError } = useSubstrate();
+  const {
+    apiState,
+    keyring,
+    keyringState,
+    apiError
+  } = useSubstrate();
   const accountPair =
     accountAddress &&
     keyringState === 'READY' &&
@@ -26,21 +28,22 @@ function Main () {
 
   const loader = text =>
     <Dimmer active>
-      <Loader size='small'>{text}</Loader>
+      <Loader size="small">{text}</Loader>
     </Dimmer>;
 
   const message = err =>
     <Grid centered columns={2} padded>
       <Grid.Column>
         <Message negative compact floating
-          header='Error Connecting to Substrate'
-          content={`${JSON.stringify(err, null, 4)}`}
+                 header="Error Connecting to Substrate"
+                 content={`${JSON.stringify(err, null, 4)}`}
         />
       </Grid.Column>
     </Grid>;
 
-  if (apiState === 'ERROR') return message(apiError);
-  else if (apiState !== 'READY') return loader('Connecting to Substrate');
+  if (apiState === 'ERROR') {
+    return message(apiError);
+  } else if (apiState !== 'READY') return loader('Connecting to Substrate');
 
   if (keyringState !== 'READY') {
     return loader('Loading accounts (please review any extension\'s authorization)');
@@ -51,33 +54,28 @@ function Main () {
   return (
     <div ref={contextRef}>
       <Sticky context={contextRef}>
-        <AccountSelector setAccountAddress={setAccountAddress} />
+        <AccountSelector setAccountAddress={setAccountAddress}/>
       </Sticky>
       <Container>
-        <Grid stackable columns='equal'>
+        <Grid stackable columns="equal">
           <Grid.Row stretched>
-            <NodeInfo />
-            <Metadata />
-            <BlockNumber />
-            <BlockNumber finalized />
+            <NodeInfo/>
+            <Events/>
+            <BlockNumber/>
+            <BlockNumber finalized/>
           </Grid.Row>
           <Grid.Row stretched>
-            <Balances />
+            <Balances/>
           </Grid.Row>
           <Grid.Row>
-            <Transfer accountPair={accountPair} />
-            <Upgrade accountPair={accountPair} />
+            <Transfer accountPair={accountPair}/>
           </Grid.Row>
           <Grid.Row>
-            <Interactor accountPair={accountPair} />
-            <Events />
-          </Grid.Row>
-          <Grid.Row>
-            <TemplateModule accountPair={accountPair} />
+            <TemplateModule accountPair={accountPair}/>
           </Grid.Row>
         </Grid>
       </Container>
-      <DeveloperConsole />
+      <DeveloperConsole/>
     </div>
   );
 }
@@ -85,7 +83,7 @@ function Main () {
 export default function App () {
   return (
     <SubstrateContextProvider>
-      <Main />
+      <Main/>
     </SubstrateContextProvider>
   );
 }
