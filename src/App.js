@@ -60,15 +60,13 @@ function Main () {
         <Grid stackable columns="equal">
           <Grid.Row stretched>
             <NodeInfo/>
-            <Events/>
             <BlockNumber/>
             <BlockNumber finalized/>
           </Grid.Row>
           <Grid.Row stretched>
-            <Balances/>
+            <Events/>
           </Grid.Row>
           <Grid.Row>
-            <Transfer accountPair={accountPair}/>
           </Grid.Row>
           <Grid.Row>
             <TemplateModule accountPair={accountPair}/>
